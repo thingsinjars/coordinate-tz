@@ -39,16 +39,17 @@ BinaryHeap.prototype = {
     // To remove a value, we must search through the array to find
     // it.
     for (var i = 0; i < len; i++) {
-      if (this.content[i] == node) {
+      if (this.content[i] === node) {
         // When it is found, the process seen in 'pop' is repeated
         // to fill up the hole.
         var end = this.content.pop();
-        if (i != len - 1) {
+        if (i !== len - 1) {
           this.content[i] = end;
-          if (this.scoreFunction(end) < this.scoreFunction(node))
+          if (this.scoreFunction(end) < this.scoreFunction(node)) {
             this.bubbleUp(i);
-          else
+          } else {
             this.sinkDown(i);
+          }
         }
         return;
       }
@@ -86,7 +87,8 @@ BinaryHeap.prototype = {
     // Look up the target element and its score.
     var length = this.content.length,
         element = this.content[n],
-        elemScore = this.scoreFunction(element);
+        elemScore = this.scoreFunction(element),
+        child1, child1Score, child2, child2Score;
 
     while(true) {
       // Compute the indices of the child elements.
@@ -97,22 +99,24 @@ BinaryHeap.prototype = {
       // If the first child exists (is inside the array)...
       if (child1N < length) {
         // Look it up and compute its score.
-        var child1 = this.content[child1N],
-            child1Score = this.scoreFunction(child1);
+        child1 = this.content[child1N];
+        child1Score = this.scoreFunction(child1);
         // If the score is less than our element's, we need to swap.
-        if (child1Score < elemScore)
+        if (child1Score < elemScore) {
           swap = child1N;
+        }
       }
       // Do the same checks for the other child.
       if (child2N < length) {
-        var child2 = this.content[child2N],
-            child2Score = this.scoreFunction(child2);
-        if (child2Score < (swap == null ? elemScore : child1Score))
+        child2 = this.content[child2N],
+        child2Score = this.scoreFunction(child2);
+        if (child2Score < (swap === null ? elemScore : child1Score)) {
           swap = child2N;
+        }
       }
 
       // If the element needs to be moved, swap it, and continue.
-      if (swap != null) {
+      if (swap !== null) {
         this.content[n] = this.content[swap];
         this.content[swap] = element;
         n = swap;
@@ -124,4 +128,3 @@ BinaryHeap.prototype = {
     }
   }
 };
-
