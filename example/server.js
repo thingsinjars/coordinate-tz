@@ -1,5 +1,5 @@
 var sys = require('util');
-var CoordinateTZ = require('coordinate-tz'),
+var CoordinateTZ = require('../index'),
 	zoneinfo = require('zoneinfo'),
     TZDate = zoneinfo.TZDate;
 

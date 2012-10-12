@@ -12,7 +12,6 @@
     "node":       ">=0.2.0"
   },
   "dependencies": {
-    "coordinate-tz"     : ">=0.1.0",
     "zoneinfo"          : ">=0.1.7"
   }
 }
