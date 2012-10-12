@@ -3,7 +3,7 @@
   "description":  "Translate map coordinates to a timezone",
   "keywords":     ["time", "timezone", "coordinates", "latitude", "longitude"],
   "author":       "Simon Madine",
-  "version":      "0.1.0",
+  "version":      "0.1.1",
   "licenses": [{
     "type":       "MIT",
     "url":        "http://opensource.org/licenses/mit-license.php"
