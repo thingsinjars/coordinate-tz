@@ -19,6 +19,7 @@
 //THE SOFTWARE.
 var BinaryHeap = require('./binaryHeap').BinaryHeap;
 exports.kdTree = kdTree;
+var bestNodes;
 
 function kdTree(points, metric, dimensions) {
 
@@ -35,8 +36,8 @@ function kdTree(points, metric, dimensions) {
 
   function buildTree(points, depth, parent) {
     var dim = depth % dimensions.length;
-    if(points.length === 0) return null;
-    if(points.length === 1) return new Node(points[0], dim, parent);
+    if(points.length === 0) {return null;}
+    if(points.length === 1) {return new Node(points[0], dim, parent);}
 
     points.sort(function(a,b){ return a[dimensions[dim]] - b[dimensions[dim]]; });
 
@@ -50,7 +51,7 @@ function kdTree(points, metric, dimensions) {
   this.insert = function(point) {
     var insertPosition = innerSearch(self.root, null);
 
-    if(insertPosition == null) {
+    if(insertPosition === null) {
       self.root = new Node(point, 0, null);
       return;
     }
@@ -64,7 +65,7 @@ function kdTree(points, metric, dimensions) {
     }
 
     function innerSearch(node, parent) {
-      if(node == null) return parent;
+      if(node === null) {return parent;}
 
       var dimension = dimensions[node.dimension];
       if(point[dimension] < node.obj[dimension]) {
@@ -73,16 +74,16 @@ function kdTree(points, metric, dimensions) {
         return innerSearch(node.right, node);
       }
     }
-  }
+  };
 
   this.remove = function(point) {
     var node = nodeSearch(self.root);
-    if(node == null) return;
+    if(node === null) {return;}
 
     removeNode(node);
     function nodeSearch(node) {
-      if(node == null) return null;
-      if(node.obj === point) return node;
+      if(node === null) {return null;}
+      if(node.obj === point) {return node;}
 
       var dimension = dimensions[node.dimension];
       if(point[dimension] < node.obj[dimension]) {
@@ -93,8 +94,9 @@ function kdTree(points, metric, dimensions) {
     }
 
     function removeNode(node) {
-      if(node.left == null && node.right == null) {
-        if(node.parent == null) {
+      var nextNode;
+      if(node.left === null && node.right === null) {
+        if(node.parent === null) {
           self.root = null;
           return;
         }
@@ -107,57 +109,58 @@ function kdTree(points, metric, dimensions) {
         return;
       }
 
-      if(node.left != null) {
-        var nextNode = findMax(node.left, node.dimension);
+      if(node.left !== null) {
+        nextNode = findMax(node.left, node.dimension);
       } else {
-        var nextNode = findMin(node.right, node.dimension);
+        nextNode = findMin(node.right, node.dimension);
       }
       var nextObj = nextNode.obj;
       removeNode(nextNode);
       node.obj = nextObj;
 
       function findMax(node, dim) {
-        if(node == null) return null;
+        if(node === null) {return null;}
 
         var dimension = dimensions[dim];
-        if(node.dimension == dim) {
-          if(node.right != null) return findMax(node.right, dim);
+        if(node.dimension === dim) {
+          if(node.right !== null) {return findMax(node.right, dim);}
           return node;
         }
 
-        var own = node.obj[dimension]
+        var own = node.obj[dimension];
         var left = findMax(node.left, dim);
         var right = findMax(node.right, dim);
         var max = node;
-        if(left != null && left.obj[dimension] > own) max = left;
-        if(right != null && right.obj[dimension] > max.obj[dimension]) max = right;
+        if(left !== null && left.obj[dimension] > own) {max = left;}
+        if(right !== null && right.obj[dimension] > max.obj[dimension]) {max = right;}
         return max;
       }
 
       function findMin(node, dim) {
-        if(node == null) return null;
+        if(node === null) {return null;}
 
         var dimension = dimensions[dim];
-        if(node.dimension == dim) {
-          if(node.left != null) return findMin(node.left, dim);
+        if(node.dimension === dim) {
+          if(node.left !== null) {return findMin(node.left, dim);}
           return node;
         }
 
-        var own = node.obj[dimension]
+        var own = node.obj[dimension];
         var left = findMin(node.left, dim);
         var right = findMin(node.right, dim);
         var min = node;
-        if(left != null && left.obj[dimension] < own) min = left;
-        if(right != null && right.obj[dimension] < min.obj[dimension]) min = right;
+        if(left !== null && left.obj[dimension] < own) {min = left;}
+        if(right !== null && right.obj[dimension] < min.obj[dimension]) {min = right;}
         return min;
       }
     }
-  }
+  };
 
   this.nearest = function(point, maxNodes, maxDistance) {
+    var i;
     bestNodes = new BinaryHeap(function(e){ return -e[1]; });
     if(maxDistance) {
-      for(var i=0; i<maxNodes; i++) {
+      for(i=0; i<maxNodes; i++) {
         bestNodes.push([null, maxDistance]);
       }
     }
@@ -170,7 +173,7 @@ function kdTree(points, metric, dimensions) {
 
       var linearPoint = {};
       for(var i=0; i<dimensions.length; i++) {
-        if(i == node.dimension) {
+        if(i === node.dimension) {
           linearPoint[dimensions[i]] = point[dimensions[i]];
         } else {
           linearPoint[dimensions[i]] = node.obj[dimensions[i]];
@@ -178,16 +181,16 @@ function kdTree(points, metric, dimensions) {
       }
       var linearDistance = metric(linearPoint, node.obj);
 
-      if(node.right == null && node.left == null) {
+      if(node.right === null && node.left === null) {
         if(bestNodes.size() < maxNodes || ownDistance < bestNodes.peek()[1]) {
           saveNode(node, ownDistance);
         }
         return;
       }
 
-      if(node.right == null) {
+      if(node.right === null) {
         bestChild = node.left;
-      } else if(node.left == null) {
+      } else if(node.left === null) {
         bestChild = node.right;
       } else {
         if(point[dimension] < node.obj[dimension]) {
@@ -205,12 +208,12 @@ function kdTree(points, metric, dimensions) {
 
       if(bestNodes.size() < maxNodes || Math.abs(linearDistance) < bestNodes.peek()[1]) {
         var otherChild;
-        if(bestChild == node.left) {
+        if(bestChild === node.left) {
           otherChild = node.right;
         } else {
           otherChild = node.left;
         }
-        if(otherChild != null) nearestSearch(otherChild);
+        if(otherChild !== null) {nearestSearch(otherChild);}
       }
 
       function saveNode(node, distance) {
@@ -222,26 +225,26 @@ function kdTree(points, metric, dimensions) {
     }
 
     var result = [];
-    for(var i=0; i<maxNodes; i++) {
+    for(i=0; i<maxNodes; i++) {
       if(bestNodes.content[i][0]) {
         result.push([bestNodes.content[i][0].obj, bestNodes.content[i][1]]);
       }
     }
     return result;
-  }
+  };
 
   this.balanceFactor = function() {
     return height(self.root)/(Math.log(count(self.root))/Math.log(2));
 
     function height(node) {
-      if(node == null) return 0;
+      if(node === null) {return 0;}
       return Math.max(height(node.left), height(node.right)) + 1;
     }
 
     function count(node) {
-      if(node == null) return 0;
+      if(node === null) {return 0;}
       return count(node.left) + count(node.right) + 1;
     }
-  }
+  };
 
 }
