@@ -20282,5 +20282,5 @@ module.exports = [
 {"latitude": 42.40843, "longitude": -71.01199, "timezone": "America/New_York"},
 {"latitude": 41.39482, "longitude": -73.45401, "timezone": "America/New_York"},
 {"latitude": 41.07871, "longitude": -73.46929, "timezone": "America/New_York"},
-{"latitude": 42.2942, "longitude": -83.30993, "timezone": "America/D"}
+{"latitude": 42.2942, "longitude": -83.30993, "timezone": "America/Detroit"}
 ];
